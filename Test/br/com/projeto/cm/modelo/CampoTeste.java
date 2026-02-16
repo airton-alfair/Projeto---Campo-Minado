@@ -1,5 +1,6 @@
 package br.com.projeto.cm.modelo;
 
+import br.com.projeto.cm.excessao.ExplosaoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -56,4 +57,67 @@ public class CampoTeste {
         // Deve dar falso
         assertFalse(resultado);
     }
+
+    @Test
+    void testeValorPadraoAtributoMarcado(){
+        assertFalse(campo.isMarcado());
+    }
+
+    @Test
+    void testeAlterarMarcacaoDuasChamadas(){
+        campo.alternarMarcacao();
+        campo.alternarMarcacao();
+        assertFalse(campo.isMarcado());
+    }
+    @Test
+    void testeAbrrirNaoMinadoNaoMarcado(){
+        assertTrue(campo.abrir());
+    }
+
+    @Test
+     void testeAbrrirNaoMinadoNaoMarcado2(){
+        campo.alternarMarcacao();
+        assertFalse(campo.abrir());
+    }
+
+    @Test
+    void testeAbrirMinadoNaoMarcado(){
+        campo.minar();
+
+        assertThrows(ExplosaoException.class, () -> {
+           campo.abrir();
+        });
+    }
+
+    @Test
+    void testeAbrirComVizinhos(){
+
+        Campo campo11 = new Campo(1,1);
+        Campo campo22 = new Campo(2,2);
+        campo22.adicionarVizinho(campo11);
+
+        campo.adicionarVizinho(campo22);
+        campo.abrir();
+
+        assertTrue(campo22.isAberto() && campo11.isAberto());
+    }
+
+    @Test
+    void testeAbrirComVizinhos2(){
+
+        Campo campo11 = new Campo(1,1);
+        Campo campo12 = new Campo(1,2);
+        campo12.minar(); // testar minando o campo
+
+        Campo campo22 = new Campo(2,2);
+        campo22.adicionarVizinho(campo11);
+
+        campo.adicionarVizinho(campo22);
+        campo.abrir();
+
+        assertTrue(campo22.isAberto() && campo11.isFechado()); // Campo 1,1 deve estar fechado
+    }
+
+
+
 }

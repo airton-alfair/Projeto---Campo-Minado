@@ -1,5 +1,7 @@
 package br.com.projeto.cm.modelo;
 
+import br.com.projeto.cm.excessao.ExplosaoException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,5 +40,52 @@ public class Campo {
         }else{
             return false;
         }
+    }
+
+    // Adicionando a marcação
+    void alternarMarcacao(){
+        if(!aberto){
+            marcado = !marcado;
+        }
+    }
+
+    boolean abrir(){
+        if(!aberto && !marcado){
+            aberto = true;
+
+            if(minado){
+                throw new ExplosaoException();
+            }
+
+            if(vizinhancaSegura()){
+                vizinhos.forEach(v -> v.abrir()); // quando nao coloca numero é pq esta seguro
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //momento em que abre sequencialmente varias casas
+    boolean vizinhancaSegura(){
+        return vizinhos.stream().noneMatch(v -> v.minado); // 'v' de  vizinho
+    }
+
+    void minar(){
+        minado = true;
+    }
+
+    // Basicamente um metodo get
+    public boolean isMarcado(){
+        return marcado;
+    }
+
+    //Outro metodo get
+    public boolean isAberto(){
+        return aberto;
+    }
+
+    public boolean isFechado(){
+        return !isAberto();
     }
 }
