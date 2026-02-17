@@ -88,4 +88,45 @@ public class Campo {
     public boolean isFechado(){
         return !isAberto();
     }
+
+    public int getLinha() {
+        return linha;
+    }
+
+    public int getColuna() {
+        return coluna;
+    }
+
+    // Para marcacao
+    boolean objetivoAlcancado(){
+        boolean desvendado = !minado && aberto;
+        boolean protegido = minado && marcado;
+        return desvendado || protegido;
+    }
+
+    // Mostra o numero na casa proximo as minas
+    long minasNaVizinhanca(){
+        return vizinhos.stream().filter(v ->v.minado).count();
+    }
+
+    void reiniciar(){
+        aberto = false;
+        minado = false;
+        marcado = false;
+    }
+
+    //marcacoes
+    public String toString(){
+        if(marcado){
+            return "X";
+        } else if(aberto && minado){
+            return "*";
+        } else if(aberto &&  minasNaVizinhanca() > 0){
+            return Long.toString(minasNaVizinhanca());
+        } else if(aberto){
+            return " ";
+        } else{
+            return "?"; // relata que nao esta aberto nem fechado
+        }
+    }
 }
