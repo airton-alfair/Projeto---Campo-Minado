@@ -28,7 +28,7 @@ public class Campo {
 
         // "Distancias"
         int deltaLinha = Math.abs(linha - vizinho.linha);
-        int deltaColuna = Math.abs(linha - vizinho.coluna);
+        int deltaColuna = Math.abs(coluna - vizinho.coluna);
         int deltaGeral = deltaColuna + deltaLinha;
 
         if(deltaGeral == 1 && !diagonal){
@@ -82,6 +82,10 @@ public class Campo {
     // Basicamente um metodo get
     public boolean isMarcado(){
         return marcado;
+    }
+
+    void setAberto(boolean aberto){
+        this.aberto = aberto;
     }
 
     //Outro metodo get
