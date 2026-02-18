@@ -1,6 +1,6 @@
 package br.com.projeto.cm.modelo;
 
-import br.com.projeto.cm.excessao.ExplosaoException;
+import br.com.projeto.cm.excecao.ExplosaoException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +73,10 @@ public class Campo {
 
     void minar(){
         minado = true;
+    }
+
+    public boolean isMinado(){
+        return minado;
     }
 
     // Basicamente um metodo get

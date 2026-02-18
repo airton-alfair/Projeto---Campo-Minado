@@ -1,6 +1,6 @@
 package br.com.projeto.cm.modelo;
 
-import br.com.projeto.cm.excessao.ExplosaoException;
+import br.com.projeto.cm.excecao.ExplosaoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

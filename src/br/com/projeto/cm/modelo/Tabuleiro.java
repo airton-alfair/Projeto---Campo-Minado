@@ -2,6 +2,7 @@ package br.com.projeto.cm.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class Tabuleiro {
 
@@ -19,8 +20,22 @@ public class Tabuleiro {
         gerarCampos();
         associarOsVizinhos();
         sortearMinas();
-
     }
+
+    public void abrir(int linha, int coluna){
+        campos.parallelStream()
+            .filter(c -> c.getLinha() == linha && c.getColuna() == coluna)
+            .findFirst() // operacao terminadora
+            .ifPresent(c -> c.abrir());
+    }
+
+    public void alternarMarcacao(int linha, int coluna){
+        campos.parallelStream()
+            .filter(c -> c.getLinha() == linha && c.getColuna() == coluna)
+            .findFirst() // operacao terminadora
+            .ifPresent(c -> c.alternarMarcacao());
+    }
+
 
     private void gerarCampos() {
         for (int linha = 0; linha < linhas; linha++) {
@@ -39,5 +54,41 @@ public class Tabuleiro {
     }
 
     private void sortearMinas() {
+        long minasArmadas = 0;
+        Predicate<Campo> minado = c -> c.isMinado();
+
+        do {
+            minasArmadas = campos.stream().filter(minado).count();
+            int aleatorio = (int)(Math.random() * campos.size()); //Sem os parentes o resultado e alterado
+            campos.get(aleatorio).minar();  // int vezes random daria 0, por isso ele tem que multiplicar separado
+        }while(minasArmadas < minas);
+    }
+
+    public boolean objetivoAlcancado(){
+        return  campos.stream().allMatch(c -> c.objetivoAlcancado());
+    }
+
+    public void reiniciar(){
+        campos.stream().forEach(c -> c.reiniciar());
+        sortearMinas();
+    }
+
+    // aqui vai ser um pouco da interface no terminal
+    int i = 0;
+    public String toString(){
+        StringBuilder sb = new StringBuilder(); // StringBuilder para concatenar todas as Strings
+
+        for (int l = 0; l < linhas; l++) {
+
+            for (int c = 0; c < colunas; c++) { // valores das colunas
+                sb.append(" ");
+                sb.append(campos.get(i));
+                sb.append(" ");
+                i++;
+            }
+            sb.append("\n");
+        }
+
+        return sb.toString();
     }
 }
